@@ -127,4 +127,22 @@
         const cell = document.createElement('div');
         cell.className = 'cell';
         cell.textContent = val;
-        cell.addEventListener('clic
+        cell.addEventListener('click', () => handleClick(i));
+        board.appendChild(cell);
+      });
+    }
+
+    function resetGame() {
+      cells = Array(9).fill('');
+      currentPlayer = 'X';
+      gameOver = false;
+      status.textContent = "Your turn (Player 1)";
+      render();
+    }
+
+    resetBtn.addEventListener('click', resetGame);
+
+    render();
+  </script>
+</body>
+</html>
