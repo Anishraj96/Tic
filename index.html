@@ -1,92 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Single Player Chess</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-      background: #f4f4f4;
-    }
-    #board {
-      width: 400px;
-      margin: 20px auto;
-    }
-    #status {
-      margin-top: 10px;
-      font-size: 18px;
-    }
-  </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/css/chessboard.min.css" />
+  <meta charset="UTF-8" />
+  <title>Tic Tac Toe - Single Player</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Single Player Chess</h1>
-  <div id="board"></div>
-  <div id="status">You play as White</div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/js/chessboard.min.js"></script>
-  <script>
-    var board = null;
-    var game = new Chess();
-
-    function makeRandomMove() {
-      var possibleMoves = game.moves();
-      if (game.game_over()) return;
-
-      var move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-      game.move(move);
-      board.position(game.fen());
-
-      if (!game.game_over()) {
-        updateStatus();
-      }
-    }
-
-    function onDragStart(source, piece) {
-      if (game.game_over() || piece.search(/^b/) !== -1) return false;
-    }
-
-    function onDrop(source, target) {
-      var move = game.move({
-        from: source,
-        to: target,
-        promotion: 'q'
-      });
-
-      if (move === null) return 'snapback';
-
-      updateStatus();
-      setTimeout(makeRandomMove, 500);
-    }
-
-    function updateStatus() {
-      var status = '';
-
-      if (game.in_checkmate()) {
-        status = 'Game over, ' + (game.turn() === 'w' ? 'Black' : 'White') + ' wins by checkmate.';
-      } else if (game.in_draw()) {
-        status = 'Game over, drawn position.';
-      } else {
-        status = (game.turn() === 'w' ? 'White' : 'Black') + ' to move';
-
-        if (game.in_check()) {
-          status += ', ' + (game.turn() === 'w' ? 'White' : 'Black') + ' is in check';
-        }
-      }
-
-      document.getElementById('status').innerHTML = status;
-    }
-
-    var config = {
-      draggable: true,
-      position: 'start',
-      onDragStart: onDragStart,
-      onDrop: onDrop
-    };
-    board = Chessboard('board', config);
-  </script>
+  <div class="container">
+    <h1>Tic Tac Toe</h1>
+    <div id="board" class="board"></div>
+    <div id="status" class="status">Your turn (X)</div>
+    <button onclick="resetGame()">Restart Game</button>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
