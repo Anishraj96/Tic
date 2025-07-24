@@ -31,8 +31,8 @@ function playerMove(index) {
   }
   statusElement.textContent = "AI is thinking...";
   setTimeout(() => {
-    let bestMove = getBestMove(board);
-    board[bestMove] = "O";
+    let move = getMediumAIMove(board);
+    board[move] = "O";
     renderBoard();
     if (checkWinner("O")) {
       statusElement.textContent = "AI wins!";
@@ -46,21 +46,28 @@ function playerMove(index) {
   }, 400);
 }
 
-function getBestMove(boardState) {
-  let bestScore = -Infinity;
-  let move;
-  for (let i = 0; i < boardState.length; i++) {
-    if (boardState[i] === "") {
-      boardState[i] = "O";
-      let score = minimax(boardState, 0, false);
-      boardState[i] = "";
-      if (score > bestScore) {
-        bestScore = score;
-        move = i;
+function getMediumAIMove(boardState) {
+  const emptyCells = boardState.map((val, idx) => val === "" ? idx : null).filter(v => v !== null);
+  const useSmartMove = Math.random() < 0.7; // 70% chance to play smart
+
+  if (useSmartMove) {
+    let bestScore = -Infinity;
+    let move;
+    for (let i = 0; i < boardState.length; i++) {
+      if (boardState[i] === "") {
+        boardState[i] = "O";
+        let score = minimax(boardState, 0, false);
+        boardState[i] = "";
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
+        }
       }
     }
+    return move;
+  } else {
+    return emptyCells[Math.floor(Math.random() * emptyCells.length)];
   }
-  return move;
 }
 
 function minimax(newBoard, depth, isMaximizing) {
@@ -97,18 +104,4 @@ function checkWinner(player) {
 
 function checkWinnerFor(b, player) {
   const wins = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-  ];
-  return wins.some(combo => combo.every(i => b[i] === player));
-}
-
-function resetGame() {
-  board = ["", "", "", "", "", "", "", "", ""];
-  gameOver = false;
-  statusElement.textContent = "Your turn (X)";
-  renderBoard();
-}
-
-renderBoard();
+    [0,1,2], [3,4,5], [6,7,8]()
